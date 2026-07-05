@@ -12,8 +12,11 @@
     --cd-size:60px;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{height:100%;overflow:hidden;}
+  html{height:100%;overflow:hidden;}
   body{
+    height:100%;height:100dvh;
+    position:fixed;inset:0;width:100%;
+    overflow:hidden;
     font-family:system-ui,-apple-system,"Segoe UI","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif;
     background:#2a2a33;
     color:var(--ink);
@@ -21,6 +24,18 @@
     touch-action:none;
     display:flex;flex-direction:column;
   }
+
+  /* ===== 横向き案内(スマホは横画面推奨) ===== */
+  #rotatePrompt{
+    display:none;
+    position:fixed;inset:0;z-index:9999;
+    background:var(--ink);color:#fff;
+    flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:16px;padding:20px;
+  }
+  .rotate-icon{font-size:56px;animation:rotateHint 1.6s ease-in-out infinite;}
+  @keyframes rotateHint{0%,100%{transform:rotate(0deg);}50%{transform:rotate(90deg);}}
+  #rotatePrompt p{font-size:16px;line-height:1.6;}
 
   /* ===== 画面切り替え ===== */
   .screen{display:none;flex:1;flex-direction:column;min-height:0;}
@@ -378,9 +393,20 @@
   .over-btns button.primary{background:var(--hazard-y);}
   .over-btns button.secondary{background:#ddd;}
   .over-btns button:active{transform:translateY(3px);box-shadow:none;}
+
+  /* ===== 横向き案内(スマホの縦持ちを検知したら最優先で表示) ===== */
+  @media (orientation:portrait) and (hover:none) and (pointer:coarse){
+    #rotatePrompt{display:flex;}
+    .screen.active{display:none;}
+  }
 </style>
 </head>
 <body>
+
+<div id="rotatePrompt" aria-hidden="true">
+  <div class="rotate-icon">📱</div>
+  <p>横画面にしてください</p>
+</div>
 
 <!-- ============ ホーム画面 ============ -->
 <div id="home" class="screen active">
